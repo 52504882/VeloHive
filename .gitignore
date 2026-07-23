@@ -2,6 +2,7 @@
 .superpowers/
 .worktrees/
 node_modules/
+.expo/
 dist/
 build/
 .env
