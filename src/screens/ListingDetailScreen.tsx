@@ -41,7 +41,7 @@ export function ListingDetailScreen({ listingId, onBack }: ListingDetailScreenPr
       <PrimaryButton label="返回" onPress={onBack} />
       <Section>
         <Text style={styles.screenTitle}>商品详情</Text>
-        <Image source={{ uri: listing.imageUrls[0] }} style={styles.image} />
+        <Image resizeMode="cover" source={{ uri: listing.imageUrls[0] }} style={styles.image} />
         <Text style={styles.cardTitle}>{listing.title}</Text>
         <Text style={styles.price}>￥{listing.price.toLocaleString("zh-CN")}</Text>
         <Text style={styles.meta}>

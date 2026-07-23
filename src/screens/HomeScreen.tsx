@@ -59,7 +59,7 @@ function GearList({ onOpenListing }: { onOpenListing: (listingId: string) => voi
 
         return (
           <Section key={listing.id}>
-            <Image source={{ uri: listing.imageUrls[0] }} style={styles.image} />
+            <Image resizeMode="cover" source={{ uri: listing.imageUrls[0] }} style={styles.image} />
             <Text style={styles.cardTitle}>{listing.title}</Text>
             <Text style={styles.price}>￥{listing.price.toLocaleString("zh-CN")}</Text>
             <Text style={styles.meta}>
@@ -88,7 +88,7 @@ function HubList({ onOpenHub }: { onOpenHub: (hubId: string) => void }) {
       <Text style={styles.screenTitle}>骑友友好据点</Text>
       {hubs.map((hub) => (
         <Section key={hub.id}>
-          <Image source={{ uri: hub.imageUrls[0] }} style={styles.image} />
+          <Image resizeMode="cover" source={{ uri: hub.imageUrls[0] }} style={styles.image} />
           <Text style={styles.cardTitle}>{hub.name}</Text>
           <Text style={styles.meta}>{hub.address}</Text>
           <Text style={styles.meta}>{hub.facilityTags.join(" · ")}</Text>

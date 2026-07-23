@@ -31,7 +31,7 @@ export function HubDetailScreen({ hubId, onBack }: HubDetailScreenProps) {
       <PrimaryButton label="返回" onPress={onBack} />
       <Section>
         <Text style={styles.screenTitle}>据点详情</Text>
-        <Image source={{ uri: hub.imageUrls[0] }} style={styles.image} />
+        <Image resizeMode="cover" source={{ uri: hub.imageUrls[0] }} style={styles.image} />
         <Text style={styles.cardTitle}>{hub.name}</Text>
         <Text style={styles.meta}>{hub.address}</Text>
         <Text style={styles.meta}>{hub.businessHours}</Text>

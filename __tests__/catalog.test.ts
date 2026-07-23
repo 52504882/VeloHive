@@ -30,6 +30,17 @@ describe("seed data", () => {
     expect(listings.every((listing) => userIds.has(listing.sellerId))).toBe(true);
   });
 
+  it("uses mobile-optimized image URLs for visible listing and hub cards", () => {
+    const visibleImageUrls = [
+      ...listings.flatMap((listing) => listing.imageUrls),
+      ...hubs.flatMap((hub) => hub.imageUrls)
+    ];
+
+    expect(visibleImageUrls.every((imageUrl) => imageUrl.includes("auto=format"))).toBe(true);
+    expect(visibleImageUrls.every((imageUrl) => imageUrl.includes("fit=crop"))).toBe(true);
+    expect(visibleImageUrls.every((imageUrl) => imageUrl.includes("w=900"))).toBe(true);
+  });
+
   it("links every verification to a unique existing listing", () => {
     const verificationListingIds = verifications.map((verification) => verification.listingId);
 
