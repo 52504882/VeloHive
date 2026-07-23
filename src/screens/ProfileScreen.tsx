@@ -8,13 +8,24 @@ export function ProfileScreen() {
   const user = users.find((item) => item.id === currentUserId);
   const stats = getProfileStats(currentUserId);
 
+  if (!user) {
+    return (
+      <>
+        <Text style={styles.screenTitle}>我的</Text>
+        <Section>
+          <Text style={styles.item}>未找到用户资料</Text>
+        </Section>
+      </>
+    );
+  }
+
   return (
     <>
       <Text style={styles.screenTitle}>我的</Text>
       <Section>
-        <Text style={styles.name}>{user?.nickname}</Text>
+        <Text style={styles.name}>{user.nickname}</Text>
         <Text style={styles.meta}>
-          {user?.city} · {user?.riderTags.join(" · ")}
+          {user.city} · {user.riderTags.join(" · ")}
         </Text>
       </Section>
       <Section>

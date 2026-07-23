@@ -24,6 +24,8 @@ describe("App", () => {
 
     fireEvent.press(screen.getByText("发布"));
     expect(screen.getByText("发布闲置装备")).toBeTruthy();
+    expect(screen.getByDisplayValue("32800")).toBeTruthy();
+    expect(screen.queryByText("价格必须大于 0")).toBeNull();
 
     fireEvent.press(screen.getByText("消息"));
     expect(screen.getByText("周六下午青浦湖畔咖啡看车可以。")).toBeTruthy();

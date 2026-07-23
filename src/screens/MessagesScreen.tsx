@@ -1,8 +1,16 @@
 import { StyleSheet, Text } from "react-native";
 import { conversations } from "../data/seed";
+import type { ConversationMeetupStatus } from "../domain/types";
 import { findListingById } from "../services/catalog";
 import { Section } from "../ui/components";
 import { colors, spacing } from "../ui/theme";
+
+const meetupStatusLabels: Record<ConversationMeetupStatus, string> = {
+  chatting: "沟通中",
+  viewing_scheduled: "已约看",
+  completed: "已完成",
+  cancelled: "已取消"
+};
 
 export function MessagesScreen() {
   return (
@@ -15,7 +23,7 @@ export function MessagesScreen() {
           <Section key={conversation.id}>
             <Text style={styles.title}>{listing?.title ?? "关联商品"}</Text>
             <Text style={styles.preview}>{conversation.lastMessagePreview}</Text>
-            <Text style={styles.meta}>状态：已约看</Text>
+            <Text style={styles.meta}>状态：{meetupStatusLabels[conversation.meetupStatus]}</Text>
           </Section>
         );
       })}
