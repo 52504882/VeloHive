@@ -1,9 +1,31 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import App from "../App";
 
+function renderEnteredApp() {
+  render(<App />);
+
+  fireEvent.press(screen.getByLabelText("进入演示模式"));
+  fireEvent.press(screen.getByText("我已阅读并同意《用户协议》"));
+  fireEvent.press(screen.getByText("我已阅读并同意《隐私政策》"));
+  fireEvent.press(screen.getByText("同意并继续"));
+}
+
 describe("App", () => {
-  it("renders marketplace listings on the Gear tab", () => {
+  it("shows auth and consent before entering the marketplace", () => {
     render(<App />);
+
+    expect(screen.getByText("登录 VeloHive")).toBeTruthy();
+    expect(screen.queryByText("Specialized Tarmac SL7 整车 52 码")).toBeNull();
+
+    fireEvent.press(screen.getByLabelText("进入演示模式"));
+    expect(screen.getByText("开始前确认")).toBeTruthy();
+
+    fireEvent.press(screen.getByText("同意并继续"));
+    expect(screen.getByText("请先阅读并勾选用户协议和隐私政策")).toBeTruthy();
+  });
+
+  it("renders marketplace listings on the Gear tab", () => {
+    renderEnteredApp();
 
     expect(screen.getByText("VeloHive")).toBeTruthy();
     expect(screen.getByText("Specialized Tarmac SL7 整车 52 码")).toBeTruthy();
@@ -11,7 +33,7 @@ describe("App", () => {
   });
 
   it("narrows Gear tab results with search and inspection filter", () => {
-    render(<App />);
+    renderEnteredApp();
 
     fireEvent.changeText(screen.getByLabelText("搜索装备"), "garmin");
 
@@ -25,7 +47,7 @@ describe("App", () => {
   });
 
   it("opens listing detail from Gear results", () => {
-    render(<App />);
+    renderEnteredApp();
 
     fireEvent.press(screen.getByLabelText("查看商品 Specialized Tarmac SL7 整车 52 码"));
 
@@ -34,7 +56,7 @@ describe("App", () => {
   });
 
   it("switches from Gear to Hubs", () => {
-    render(<App />);
+    renderEnteredApp();
 
     fireEvent.press(screen.getByText("找据点"));
 
@@ -43,7 +65,7 @@ describe("App", () => {
   });
 
   it("opens hub detail from Hubs results", () => {
-    render(<App />);
+    renderEnteredApp();
 
     fireEvent.press(screen.getByText("找据点"));
     fireEvent.press(screen.getByLabelText("查看据点 青浦湖畔咖啡"));
@@ -53,7 +75,7 @@ describe("App", () => {
   });
 
   it("opens Publish, Messages, and Profile tabs", () => {
-    render(<App />);
+    renderEnteredApp();
 
     fireEvent.press(screen.getByText("发布"));
     expect(screen.getByText("发布闲置装备")).toBeTruthy();

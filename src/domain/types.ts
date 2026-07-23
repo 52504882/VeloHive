@@ -27,7 +27,9 @@ export interface User {
   riderTags: string[];
   listingCount: number;
   soldCount: number;
-  status: "active" | "limited";
+  acceptedTermsAt: string | null;
+  acceptedPrivacyAt: string | null;
+  status: "active" | "limited" | "banned";
 }
 
 export interface ListingVerification {

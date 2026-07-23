@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { hasPublicEnv } from "./src/config/env";
+import { AuthScreen } from "./src/screens/AuthScreen";
 import { HubDetailScreen } from "./src/screens/HubDetailScreen";
 import { HomeScreen } from "./src/screens/HomeScreen";
+import { LegalConsentScreen } from "./src/screens/LegalConsentScreen";
 import { ListingDetailScreen } from "./src/screens/ListingDetailScreen";
 import { MessagesScreen } from "./src/screens/MessagesScreen";
 import { ProfileScreen } from "./src/screens/ProfileScreen";
 import { PublishScreen } from "./src/screens/PublishScreen";
+import { getCurrentSession } from "./src/services/auth";
+import { resolveAppGateState } from "./src/services/appGate";
+import { acceptCurrentProfilePolicies, fetchCurrentProfile, type AuthProfile } from "./src/services/profile";
 import { Chip, Section } from "./src/ui/components";
 import { colors, spacing } from "./src/ui/theme";
 
@@ -27,10 +33,77 @@ const mainTabs: Array<{ id: MainTab; label: string }> = [
 ];
 
 export default function App() {
+  const authConfigured = hasPublicEnv();
+  const [loadingAuth, setLoadingAuth] = useState(authConfigured);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [profile, setProfile] = useState<AuthProfile | null>(null);
+  const [authError, setAuthError] = useState("");
   const [mainTab, setMainTab] = useState<MainTab>("home");
   const [homeTab, setHomeTab] = useState<HomeTab>("gear");
   const [detailRoute, setDetailRoute] = useState<DetailRoute>({ type: "main" });
   const resetDetailRoute = () => setDetailRoute({ type: "main" });
+  const gateState = resolveAppGateState({
+    authenticated: Boolean(userId),
+    loading: loadingAuth,
+    profile
+  });
+
+  useEffect(() => {
+    if (!authConfigured) {
+      setLoadingAuth(false);
+      return;
+    }
+
+    let mounted = true;
+    refreshSessionProfile()
+      .catch((error: unknown) => {
+        if (mounted) {
+          setAuthError(error instanceof Error ? error.message : "登录状态读取失败");
+        }
+      })
+      .finally(() => {
+        if (mounted) {
+          setLoadingAuth(false);
+        }
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [authConfigured]);
+
+  const refreshSessionProfile = async () => {
+    const { data, error } = await getCurrentSession();
+
+    if (error) {
+      throw error;
+    }
+
+    const sessionUserId = data.session?.user.id ?? null;
+    setUserId(sessionUserId);
+    setProfile(sessionUserId ? await fetchCurrentProfile(sessionUserId) : null);
+  };
+
+  const enterDemo = () => {
+    setUserId("demo-user");
+    setProfile(null);
+  };
+
+  const acceptPolicies = async (acceptedConsent: { acceptedTermsAt: string; acceptedPrivacyAt: string }) => {
+    if (!authConfigured || userId === "demo-user") {
+      setProfile({
+        id: "demo-user",
+        acceptedTermsAt: acceptedConsent.acceptedTermsAt,
+        acceptedPrivacyAt: acceptedConsent.acceptedPrivacyAt,
+        status: "active"
+      });
+      return;
+    }
+
+    if (userId) {
+      setProfile(await acceptCurrentProfilePolicies(userId, acceptedConsent));
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -40,21 +113,44 @@ export default function App() {
         <Text style={styles.region}>上海周边</Text>
       </View>
       <ScrollView contentContainerStyle={styles.content}>
-        {renderScreen(mainTab, homeTab, setHomeTab, detailRoute, setDetailRoute, resetDetailRoute)}
-      </ScrollView>
-      <View style={styles.bottomTabs}>
-        {mainTabs.map((tab) => (
-          <Chip
-            key={tab.id}
-            label={tab.label}
-            selected={mainTab === tab.id && detailRoute.type === "main"}
-            onPress={() => {
-              setMainTab(tab.id);
-              resetDetailRoute();
-            }}
+        {gateState === "loading" ? (
+          <Section>
+            <Text style={styles.title}>正在读取登录状态</Text>
+            <Text style={styles.body}>请稍候。</Text>
+          </Section>
+        ) : gateState === "auth" ? (
+          <AuthScreen
+            authConfigured={authConfigured}
+            onAuthenticated={refreshSessionProfile}
+            onEnterDemo={enterDemo}
           />
-        ))}
-      </View>
+        ) : gateState === "consent" ? (
+          <LegalConsentScreen onAccept={acceptPolicies} />
+        ) : gateState === "blocked" ? (
+          <Section>
+            <Text style={styles.title}>账号已被限制</Text>
+            <Text style={styles.body}>该账号暂时无法使用 VeloHive。如需申诉，请联系平台客服。</Text>
+          </Section>
+        ) : (
+          renderScreen(mainTab, homeTab, setHomeTab, detailRoute, setDetailRoute, resetDetailRoute)
+        )}
+        {authError ? <Text style={styles.error}>{authError}</Text> : null}
+      </ScrollView>
+      {gateState === "ready" ? (
+        <View style={styles.bottomTabs}>
+          {mainTabs.map((tab) => (
+            <Chip
+              key={tab.id}
+              label={tab.label}
+              selected={mainTab === tab.id && detailRoute.type === "main"}
+              onPress={() => {
+                setMainTab(tab.id);
+                resetDetailRoute();
+              }}
+            />
+          ))}
+        </View>
+      ) : null}
     </SafeAreaView>
   );
 }
@@ -135,6 +231,12 @@ const styles = StyleSheet.create({
     color: colors.muted,
     fontSize: 14,
     lineHeight: 20
+  },
+  error: {
+    color: colors.coral,
+    fontSize: 13,
+    lineHeight: 19,
+    marginTop: spacing.md
   },
   bottomTabs: {
     flexDirection: "row",

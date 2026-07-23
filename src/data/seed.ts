@@ -11,6 +11,8 @@ export const users: User[] = [
     riderTags: ["周末骑", "青浦线", "器材党"],
     listingCount: 2,
     soldCount: 3,
+    acceptedTermsAt: "2026-07-23T08:00:00.000Z",
+    acceptedPrivacyAt: "2026-07-23T08:00:00.000Z",
     status: "active"
   },
   {
@@ -21,6 +23,8 @@ export const users: User[] = [
     riderTags: ["整车升级", "咖啡骑"],
     listingCount: 4,
     soldCount: 8,
+    acceptedTermsAt: "2026-07-23T08:00:00.000Z",
+    acceptedPrivacyAt: "2026-07-23T08:00:00.000Z",
     status: "active"
   }
 ];
