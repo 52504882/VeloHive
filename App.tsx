@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { HomeScreen } from "./src/screens/HomeScreen";
 import { Chip, Section } from "./src/ui/components";
 import { colors, spacing } from "./src/ui/theme";
 
@@ -29,20 +30,7 @@ export default function App() {
       </View>
       <ScrollView contentContainerStyle={styles.content}>
         {mainTab === "home" ? (
-          <>
-            <View style={styles.tabRow}>
-              <Chip label="淘装备" selected={homeTab === "gear"} onPress={() => setHomeTab("gear")} />
-              <Chip label="找据点" selected={homeTab === "hubs"} onPress={() => setHomeTab("hubs")} />
-            </View>
-            <Section>
-              <Text style={styles.title}>{homeTab === "gear" ? "支持线下验货的公路车闲置" : "骑友友好据点"}</Text>
-              <Text style={styles.body}>
-                {homeTab === "gear"
-                  ? "整车、车架、轮组、套件、码表和高价值配件。"
-                  : "咖啡吧、农家乐、车店、骑行驿站，适合休息、集合和验货。"}
-              </Text>
-            </Section>
-          </>
+          <HomeScreen activeTab={homeTab} onChangeTab={setHomeTab} />
         ) : (
           <Section>
             <Text style={styles.title}>{mainTabs.find((tab) => tab.id === mainTab)?.label}</Text>
@@ -82,11 +70,6 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: spacing.lg
-  },
-  tabRow: {
-    flexDirection: "row",
-    gap: spacing.sm,
-    marginBottom: spacing.md
   },
   title: {
     color: colors.ink,
