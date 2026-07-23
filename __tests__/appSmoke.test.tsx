@@ -18,4 +18,17 @@ describe("App", () => {
     expect(screen.getByText("青浦湖畔咖啡")).toBeTruthy();
     expect(screen.getByText("松江骑行驿站")).toBeTruthy();
   });
+
+  it("opens Publish, Messages, and Profile tabs", () => {
+    render(<App />);
+
+    fireEvent.press(screen.getByText("发布"));
+    expect(screen.getByText("发布闲置装备")).toBeTruthy();
+
+    fireEvent.press(screen.getByText("消息"));
+    expect(screen.getByText("周六下午青浦湖畔咖啡看车可以。")).toBeTruthy();
+
+    fireEvent.press(screen.getByText("我的"));
+    expect(screen.getByText("阿泽")).toBeTruthy();
+  });
 });

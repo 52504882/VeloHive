@@ -3,6 +3,9 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { HomeScreen } from "./src/screens/HomeScreen";
+import { MessagesScreen } from "./src/screens/MessagesScreen";
+import { ProfileScreen } from "./src/screens/ProfileScreen";
+import { PublishScreen } from "./src/screens/PublishScreen";
 import { Chip, Section } from "./src/ui/components";
 import { colors, spacing } from "./src/ui/theme";
 
@@ -28,22 +31,35 @@ export default function App() {
         <Text style={styles.brand}>VeloHive</Text>
         <Text style={styles.region}>上海周边</Text>
       </View>
-      <ScrollView contentContainerStyle={styles.content}>
-        {mainTab === "home" ? (
-          <HomeScreen activeTab={homeTab} onChangeTab={setHomeTab} />
-        ) : (
-          <Section>
-            <Text style={styles.title}>{mainTabs.find((tab) => tab.id === mainTab)?.label}</Text>
-            <Text style={styles.body}>该页面将在后续任务中接入具体内容。</Text>
-          </Section>
-        )}
-      </ScrollView>
+      <ScrollView contentContainerStyle={styles.content}>{renderScreen(mainTab, homeTab, setHomeTab)}</ScrollView>
       <View style={styles.bottomTabs}>
         {mainTabs.map((tab) => (
           <Chip key={tab.id} label={tab.label} selected={mainTab === tab.id} onPress={() => setMainTab(tab.id)} />
         ))}
       </View>
     </SafeAreaView>
+  );
+}
+
+function renderScreen(mainTab: MainTab, homeTab: HomeTab, setHomeTab: (tab: HomeTab) => void) {
+  if (mainTab === "home") {
+    return <HomeScreen activeTab={homeTab} onChangeTab={setHomeTab} />;
+  }
+  if (mainTab === "publish") {
+    return <PublishScreen />;
+  }
+  if (mainTab === "messages") {
+    return <MessagesScreen />;
+  }
+  if (mainTab === "profile") {
+    return <ProfileScreen />;
+  }
+
+  return (
+    <Section>
+      <Text style={styles.title}>地图</Text>
+      <Text style={styles.body}>展示上海周边商品和据点的地图视图。</Text>
+    </Section>
   );
 }
 
