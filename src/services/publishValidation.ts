@@ -36,7 +36,8 @@ export function validatePublishDraft(draft: PublishDraft): string[] {
     errors.push("价格必须大于 0");
   }
 
-  if (draft.supportsOfflineInspection && draft.recommendedHubIds.length === 0) {
+  const hasRecommendedHub = draft.recommendedHubIds.some((hubId) => hubId.trim().length > 0);
+  if (draft.supportsOfflineInspection && !hasRecommendedHub) {
     errors.push("支持线下验货时至少选择一个推荐据点");
   }
 
