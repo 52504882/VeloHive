@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { Chip, Section } from "./src/ui/components";
 import { colors, spacing } from "./src/ui/theme";

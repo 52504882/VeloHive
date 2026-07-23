@@ -18,7 +18,12 @@ export function Section({ children }: PropsWithChildren) {
 
 export function Chip({ label, selected = false, onPress }: ButtonProps) {
   return (
-    <Pressable onPress={onPress} style={[styles.chip, selected && styles.chipSelected]}>
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ selected }}
+      onPress={onPress}
+      style={[styles.chip, selected && styles.chipSelected]}
+    >
       <Text style={[styles.chipText, selected && styles.chipTextSelected]}>{label}</Text>
     </Pressable>
   );
@@ -26,7 +31,7 @@ export function Chip({ label, selected = false, onPress }: ButtonProps) {
 
 export function PrimaryButton({ label, onPress }: ButtonProps) {
   return (
-    <Pressable onPress={onPress} style={styles.primaryButton}>
+    <Pressable accessibilityRole="button" onPress={onPress} style={styles.primaryButton}>
       <Text style={styles.primaryButtonText}>{label}</Text>
     </Pressable>
   );
@@ -55,7 +60,10 @@ const styles = StyleSheet.create({
     borderColor: colors.line,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
-    backgroundColor: colors.surface
+    backgroundColor: colors.surface,
+    minHeight: 44,
+    alignItems: "center",
+    justifyContent: "center"
   },
   chipSelected: {
     backgroundColor: colors.forest,
