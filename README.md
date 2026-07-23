@@ -10,6 +10,16 @@ VeloHive 是一个面向上海周边骑友的公路车闲置交易与据点平�
 - 支持买卖双方约在据点线下验货。
 - 第一版不做平台担保支付，先验证供给、需求和信任机制。
 
-产品设计文档：
+## 开发命令
 
-- [公路车闲置交易与据点平台设计](docs/superpowers/specs/2026-07-23-road-bike-marketplace-design.md)
+```bash
+npm install
+npm start
+npm test
+npm run typecheck
+```
+
+## 文档
+
+- [产品设计文档](docs/superpowers/specs/2026-07-23-road-bike-marketplace-design.md)
+- [移动端 MVP 实施计划](docs/superpowers/plans/2026-07-23-velohive-mobile-mvp.md)
