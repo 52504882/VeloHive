@@ -11,6 +11,8 @@ export type ListingCategory =
 
 export type ListingStatus = "active" | "chatting" | "viewing_scheduled" | "sold" | "unavailable";
 
+export type ConversationMeetupStatus = "chatting" | "viewing_scheduled" | "completed" | "cancelled";
+
 export type HubType = "cafe" | "farm_stay" | "bike_shop" | "cycling_stop" | "other";
 
 export type HubOnboardingStatus = "approved" | "pending" | "rejected";
@@ -77,7 +79,7 @@ export interface Conversation {
   buyerId: string;
   sellerId: string;
   lastMessageAt: string;
-  meetupStatus: ListingStatus;
+  meetupStatus: ConversationMeetupStatus;
   lastMessagePreview: string;
 }
 
