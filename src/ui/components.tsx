@@ -4,6 +4,7 @@ import { colors, radii, spacing } from "./theme";
 
 interface ButtonProps {
   label: string;
+  accessibilityLabel?: string;
   selected?: boolean;
   onPress: () => void;
 }
@@ -16,9 +17,10 @@ export function Section({ children }: PropsWithChildren) {
   return <View style={styles.section}>{children}</View>;
 }
 
-export function Chip({ label, selected = false, onPress }: ButtonProps) {
+export function Chip({ label, accessibilityLabel, selected = false, onPress }: ButtonProps) {
   return (
     <Pressable
+      accessibilityLabel={accessibilityLabel}
       accessibilityRole="button"
       accessibilityState={{ selected }}
       onPress={onPress}
@@ -29,9 +31,14 @@ export function Chip({ label, selected = false, onPress }: ButtonProps) {
   );
 }
 
-export function PrimaryButton({ label, onPress }: ButtonProps) {
+export function PrimaryButton({ label, accessibilityLabel, onPress }: ButtonProps) {
   return (
-    <Pressable accessibilityRole="button" onPress={onPress} style={styles.primaryButton}>
+    <Pressable
+      accessibilityLabel={accessibilityLabel}
+      accessibilityRole="button"
+      onPress={onPress}
+      style={styles.primaryButton}
+    >
       <Text style={styles.primaryButtonText}>{label}</Text>
     </Pressable>
   );

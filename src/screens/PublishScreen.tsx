@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { StyleSheet, Switch, Text, TextInput, View } from "react-native";
 import { hubs } from "../data/seed";
 import { validatePublishDraft } from "../services/publishValidation";
@@ -14,6 +14,8 @@ export function PublishScreen() {
   const [flawDescription, setFlawDescription] = useState("右侧手变有轻微擦痕，已拍照标注。");
   const [supportsInspection, setSupportsInspection] = useState(true);
   const [selectedHubId, setSelectedHubId] = useState("hub-001");
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewBlocked, setPreviewBlocked] = useState(false);
 
   const draft = useMemo(
     () => ({
@@ -30,6 +32,24 @@ export function PublishScreen() {
   );
 
   const errors = validatePublishDraft(draft);
+  const selectedHub = hubs.find((hub) => hub.id === selectedHubId);
+
+  useEffect(() => {
+    if (errors.length > 0 && previewVisible) {
+      setPreviewVisible(false);
+    }
+  }, [errors.length, previewVisible]);
+
+  const handlePreview = () => {
+    if (errors.length > 0) {
+      setPreviewVisible(false);
+      setPreviewBlocked(true);
+      return;
+    }
+
+    setPreviewBlocked(false);
+    setPreviewVisible(true);
+  };
 
   return (
     <>
@@ -110,8 +130,20 @@ export function PublishScreen() {
             {error}
           </Text>
         ))}
-        <PrimaryButton label="预览发布" onPress={() => undefined} />
+        {previewBlocked ? <Text style={styles.error}>请先修正发布检查中的问题</Text> : null}
+        <PrimaryButton label="预览发布" onPress={handlePreview} />
       </Section>
+      {previewVisible ? (
+        <Section>
+          <Text style={styles.label}>发布预览</Text>
+          <Text style={styles.previewTitle}>{title}</Text>
+          <Text style={styles.previewMeta}>价格：￥{Number(price).toLocaleString("zh-CN")}</Text>
+          <Text style={styles.previewMeta}>
+            验货据点：{supportsInspection ? selectedHub?.name ?? "待选择" : "不启用线下验货"}
+          </Text>
+          <Text style={styles.previewMeta}>{supportsInspection ? "已启用线下验货" : "未启用线下验货"}</Text>
+        </Section>
+      ) : null}
     </>
   );
 }
@@ -155,5 +187,16 @@ const styles = StyleSheet.create({
   error: {
     color: colors.coral,
     marginBottom: spacing.sm
+  },
+  previewTitle: {
+    color: colors.ink,
+    fontSize: 16,
+    fontWeight: "800",
+    marginBottom: spacing.xs
+  },
+  previewMeta: {
+    color: colors.muted,
+    fontSize: 13,
+    lineHeight: 20
   }
 });
