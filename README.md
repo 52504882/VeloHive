@@ -1,6 +1,6 @@
-# 小蜜蜂
+# VeloHive
 
-小蜜蜂是一个面向上海周边骑友的公路车闲置交易与据点平台。
+VeloHive 是一个面向上海周边骑友的公路车闲置交易与据点平台。
 
 第一版产品方向：
 
@@ -13,4 +13,3 @@
 产品设计文档：
 
 - [公路车闲置交易与据点平台设计](docs/superpowers/specs/2026-07-23-road-bike-marketplace-design.md)
-
