@@ -1,5 +1,15 @@
 import type { ConversationMeetupStatus } from "../src/domain/types";
 import { conversations, favorites, hubs, listings, users, verifications } from "../src/data/seed";
+import {
+  findHubById,
+  findListingById,
+  getListingSeller,
+  getListingVerification,
+  getProfileStats,
+  getTrustLabel,
+  searchListings,
+  suitableInspectionHubs
+} from "../src/services/catalog";
 
 describe("seed data", () => {
   const userIds = new Set(users.map((user) => user.id));
@@ -72,5 +82,45 @@ describe("seed data", () => {
         return hubIds.has(favorite.targetId);
       })
     ).toBe(true);
+  });
+});
+
+describe("catalog services", () => {
+  it("searches listings by title, brand, and model", () => {
+    expect(searchListings("tarmac").map((listing) => listing.id)).toEqual(["listing-001"]);
+    expect(searchListings("Shimano").map((listing) => listing.id)).toEqual(["listing-002"]);
+    expect(searchListings("edge").map((listing) => listing.id)).toEqual(["listing-003"]);
+  });
+
+  it("filters listings by offline inspection support", () => {
+    expect(searchListings("", { supportsOfflineInspection: true }).map((listing) => listing.id)).toEqual([
+      "listing-001",
+      "listing-002"
+    ]);
+  });
+
+  it("returns trusted labels from self-verification scores", () => {
+    expect(getTrustLabel(92)).toBe("自证完整");
+    expect(getTrustLabel(74)).toBe("自证较完整");
+    expect(getTrustLabel(58)).toBe("基础自证");
+  });
+
+  it("resolves listing relationships", () => {
+    expect(findListingById("listing-001")?.title).toContain("Tarmac");
+    expect(getListingSeller("listing-001")?.nickname).toBe("浦西爬坡手");
+    expect(getListingVerification("listing-001")?.selfVerificationScore).toBe(92);
+    expect(findHubById("hub-001")?.name).toBe("青浦湖畔咖啡");
+  });
+
+  it("returns hubs that are suitable for inspection", () => {
+    expect(suitableInspectionHubs().map((hub) => hub.id)).toEqual(["hub-001", "hub-002"]);
+  });
+
+  it("calculates profile stats", () => {
+    expect(getProfileStats("user-001")).toEqual({
+      activeListings: 1,
+      favorites: 2,
+      conversations: 1
+    });
   });
 });
