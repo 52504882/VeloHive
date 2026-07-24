@@ -5,6 +5,7 @@ import { colors, radii, spacing } from "./theme";
 interface ButtonProps {
   label: string;
   accessibilityLabel?: string;
+  disabled?: boolean;
   selected?: boolean;
   onPress: () => void;
 }
@@ -31,13 +32,15 @@ export function Chip({ label, accessibilityLabel, selected = false, onPress }: B
   );
 }
 
-export function PrimaryButton({ label, accessibilityLabel, onPress }: ButtonProps) {
+export function PrimaryButton({ label, accessibilityLabel, disabled = false, onPress }: ButtonProps) {
   return (
     <Pressable
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="button"
+      accessibilityState={{ disabled }}
+      disabled={disabled}
       onPress={onPress}
-      style={styles.primaryButton}
+      style={[styles.primaryButton, disabled && styles.primaryButtonDisabled]}
     >
       <Text style={styles.primaryButtonText}>{label}</Text>
     </Pressable>
@@ -88,6 +91,9 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     paddingVertical: spacing.md,
     alignItems: "center"
+  },
+  primaryButtonDisabled: {
+    backgroundColor: colors.muted
   },
   primaryButtonText: {
     color: colors.surface,

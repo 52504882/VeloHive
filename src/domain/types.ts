@@ -9,7 +9,15 @@ export type ListingCategory =
   | "apparel"
   | "accessory";
 
-export type ListingStatus = "active" | "chatting" | "viewing_scheduled" | "sold" | "unavailable";
+export type ListingStatus =
+  | "draft"
+  | "pending_review"
+  | "active"
+  | "chatting"
+  | "viewing_scheduled"
+  | "sold"
+  | "removed"
+  | "unavailable";
 
 export type ConversationMeetupStatus = "chatting" | "viewing_scheduled" | "completed" | "cancelled";
 
@@ -62,6 +70,7 @@ export interface Listing {
 
 export interface Hub {
   id: string;
+  databaseId?: string;
   name: string;
   type: HubType;
   address: string;

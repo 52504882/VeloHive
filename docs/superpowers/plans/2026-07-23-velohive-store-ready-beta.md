@@ -467,7 +467,7 @@ git commit -m "feat: add auth and consent gate"
 - Test: `__tests__/publishValidation.test.ts`
 - Test: `__tests__/imageAssets.test.ts`
 
-- [ ] **Step 1: Write failing image validation tests**
+- [x] **Step 1: Write failing image validation tests**
 
 Create `__tests__/imageAssets.test.ts`:
 
@@ -491,7 +491,7 @@ describe("listing image assets", () => {
 });
 ```
 
-- [ ] **Step 2: Run the failing tests**
+- [x] **Step 2: Run the failing tests**
 
 Run:
 
@@ -501,7 +501,7 @@ npm test -- __tests__/imageAssets.test.ts --runInBand
 
 Expected: FAIL because `src/services/imageAssets.ts` does not exist.
 
-- [ ] **Step 3: Install image picker**
+- [x] **Step 3: Install image picker**
 
 Run:
 
@@ -511,7 +511,7 @@ npx expo install expo-image-picker
 
 Expected: package installation exits with code 0.
 
-- [ ] **Step 4: Add image validation and upload service**
+- [x] **Step 4: Add image validation and upload service**
 
 Create `src/services/imageAssets.ts`:
 
@@ -548,7 +548,7 @@ export async function uploadListingImage(userId: string, localUri: string, base6
 }
 ```
 
-- [ ] **Step 5: Add storage migration**
+- [x] **Step 5: Add storage migration**
 
 Create `supabase/migrations/202607230002_storage.sql`:
 
@@ -570,15 +570,15 @@ to public
 using (bucket_id = 'listing-images');
 ```
 
-- [ ] **Step 6: Implement listing repository**
+- [x] **Step 6: Implement listing repository**
 
 Create `src/services/listingRepository.ts` with `createListingDraft`, `submitListingForReview`, `fetchActiveListings`, and `fetchListingById` using Supabase. New listings must start as `pending_review`, not `active`.
 
-- [ ] **Step 7: Update Publish screen**
+- [x] **Step 7: Update Publish screen**
 
 Modify `src/screens/PublishScreen.tsx` so it lets the user pick 1-9 images, previews selected images, uploads images to `listing-images`, creates a listing, creates `listing_verifications`, and displays `已提交审核` after success.
 
-- [ ] **Step 8: Verify**
+- [x] **Step 8: Verify**
 
 Run:
 

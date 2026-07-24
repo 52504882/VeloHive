@@ -132,7 +132,7 @@ export default function App() {
             <Text style={styles.body}>该账号暂时无法使用 VeloHive。如需申诉，请联系平台客服。</Text>
           </Section>
         ) : (
-          renderScreen(mainTab, homeTab, setHomeTab, detailRoute, setDetailRoute, resetDetailRoute)
+          renderScreen(mainTab, homeTab, setHomeTab, detailRoute, setDetailRoute, resetDetailRoute, authConfigured, userId)
         )}
         {authError ? <Text style={styles.error}>{authError}</Text> : null}
       </ScrollView>
@@ -161,7 +161,9 @@ function renderScreen(
   setHomeTab: (tab: HomeTab) => void,
   detailRoute: DetailRoute,
   setDetailRoute: (route: DetailRoute) => void,
-  onBack: () => void
+  onBack: () => void,
+  authConfigured = false,
+  userId: string | null = null
 ) {
   if (detailRoute.type === "listing") {
     return <ListingDetailScreen listingId={detailRoute.listingId} onBack={onBack} />;
@@ -180,7 +182,7 @@ function renderScreen(
     );
   }
   if (mainTab === "publish") {
-    return <PublishScreen />;
+    return <PublishScreen authConfigured={authConfigured} userId={userId} />;
   }
   if (mainTab === "messages") {
     return <MessagesScreen />;

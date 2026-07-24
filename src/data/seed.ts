@@ -32,6 +32,7 @@ export const users: User[] = [
 export const hubs: Hub[] = [
   {
     id: "hub-001",
+    databaseId: "10000000-0000-0000-0000-000000000001",
     name: "青浦湖畔咖啡",
     type: "cafe",
     address: "上海市青浦区淀山湖大道 168 号",
@@ -46,6 +47,7 @@ export const hubs: Hub[] = [
   },
   {
     id: "hub-002",
+    databaseId: "10000000-0000-0000-0000-000000000002",
     name: "松江骑行驿站",
     type: "cycling_stop",
     address: "上海市松江区辰塔路 88 号",
@@ -60,6 +62,7 @@ export const hubs: Hub[] = [
   },
   {
     id: "hub-003",
+    databaseId: "10000000-0000-0000-0000-000000000003",
     name: "昆山周末农庄",
     type: "farm_stay",
     address: "昆山市锦溪镇环湖路 28 号",

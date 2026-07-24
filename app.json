@@ -7,9 +7,13 @@
     "userInterfaceStyle": "light",
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "用于选择商品照片并提交审核。"
+      }
     },
     "android": {
+      "permissions": ["READ_MEDIA_IMAGES"],
       "adaptiveIcon": {
         "backgroundColor": "#F7C948"
       }

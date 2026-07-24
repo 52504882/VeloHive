@@ -74,7 +74,7 @@ describe("App", () => {
     expect(screen.getByText("09:00-20:00")).toBeTruthy();
   });
 
-  it("opens Publish, Messages, and Profile tabs", () => {
+  it("opens Publish, Messages, and Profile tabs", async () => {
     renderEnteredApp();
 
     fireEvent.press(screen.getByText("发布"));
@@ -85,6 +85,8 @@ describe("App", () => {
     fireEvent.press(screen.getByText("预览发布"));
     expect(screen.getByText("发布预览")).toBeTruthy();
     expect(screen.getByText("Specialized Tarmac SL7 整车")).toBeTruthy();
+    fireEvent.press(screen.getByText("提交审核"));
+    expect(await screen.findByText("已提交审核")).toBeTruthy();
 
     fireEvent.press(screen.getByText("消息"));
     expect(screen.getByText("周六下午青浦湖畔咖啡看车可以。")).toBeTruthy();
