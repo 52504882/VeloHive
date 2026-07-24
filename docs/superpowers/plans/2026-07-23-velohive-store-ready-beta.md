@@ -447,7 +447,7 @@ npm run typecheck
 
 Expected: all tests pass and TypeScript exits with code 0.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add App.tsx src/services/auth.ts src/services/policyConsent.ts src/screens/AuthScreen.tsx src/screens/LegalConsentScreen.tsx src/domain/types.ts __tests__
@@ -590,7 +590,7 @@ npx expo install --check
 
 Expected: all commands exit with code 0.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add app.json package.json package-lock.json src/services src/screens/PublishScreen.tsx supabase/migrations __tests__
@@ -609,7 +609,7 @@ git commit -m "feat: add listing image publishing"
 - Test: `__tests__/prohibitedRules.test.ts`
 - Test: `__tests__/publishValidation.test.ts`
 
-- [ ] **Step 1: Write failing prohibited rule tests**
+- [x] **Step 1: Write failing prohibited rule tests**
 
 Create `__tests__/prohibitedRules.test.ts`:
 
@@ -632,7 +632,7 @@ describe("prohibited marketplace rules", () => {
 });
 ```
 
-- [ ] **Step 2: Run the failing tests**
+- [x] **Step 2: Run the failing tests**
 
 Run:
 
@@ -642,7 +642,7 @@ npm test -- __tests__/prohibitedRules.test.ts --runInBand
 
 Expected: FAIL because `src/services/prohibitedRules.ts` does not exist.
 
-- [ ] **Step 3: Implement prohibited rule matching**
+- [x] **Step 3: Implement prohibited rule matching**
 
 Create `src/services/prohibitedRules.ts`:
 
@@ -659,15 +659,15 @@ export function findProhibitedMatches(text: string, rules: ProhibitedRule[]): Pr
 }
 ```
 
-- [ ] **Step 4: Add moderation service**
+- [x] **Step 4: Add moderation service**
 
 Create `src/services/moderation.ts` with `submitListingReviewDecision(listingId, decision)`, where `decision` is `approve`, `reject`, or `remove`. It must update `listings.status`, write an `audit_logs` row, and store a readable reason for reject/remove.
 
-- [ ] **Step 5: Update publish validation**
+- [x] **Step 5: Update publish validation**
 
 Modify `src/services/publishValidation.ts` so blocked prohibited keywords prevent submit, review keywords allow submit but show `将进入人工审核`. Keep price, title, condition, description, and inspection-hub validation from the MVP.
 
-- [ ] **Step 6: Verify**
+- [x] **Step 6: Verify**
 
 Run:
 

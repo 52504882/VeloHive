@@ -1,4 +1,9 @@
-import { validatePublishDraft } from "../src/services/publishValidation";
+import { getPublishReviewWarnings, validatePublishDraft } from "../src/services/publishValidation";
+
+const prohibitedRules = [
+  { keyword: "假货", severity: "block" as const, explanation: "禁止发布假货或仿品" },
+  { keyword: "来路不明", severity: "review" as const, explanation: "需人工复核来源" }
+];
 
 describe("validatePublishDraft", () => {
   it("accepts a complete listing draft", () => {
@@ -104,5 +109,59 @@ describe("validatePublishDraft", () => {
         recommendedHubIds: []
       })
     ).toContain("价格必须大于 0");
+  });
+
+  it("blocks prohibited listing wording", () => {
+    expect(
+      validatePublishDraft(
+        {
+          title: "假货车架",
+          brand: "Specialized",
+          model: "Tarmac",
+          price: "18800",
+          condition: "9 成新",
+          flawDescription: "无明显瑕疵",
+          supportsOfflineInspection: false,
+          recommendedHubIds: []
+        },
+        prohibitedRules
+      )
+    ).toContain("禁止发布假货或仿品");
+  });
+
+  it("does not block risky wording that should enter manual review", () => {
+    expect(
+      validatePublishDraft(
+        {
+          title: "碳纤维轮组",
+          brand: "Shimano",
+          model: "C50",
+          price: "4200",
+          condition: "8 成新",
+          flawDescription: "来源来路不明，需要买家自行判断",
+          supportsOfflineInspection: false,
+          recommendedHubIds: []
+        },
+        prohibitedRules
+      )
+    ).toEqual([]);
+  });
+
+  it("returns manual review warnings for risky wording", () => {
+    expect(
+      getPublishReviewWarnings(
+        {
+          title: "碳纤维轮组",
+          brand: "Shimano",
+          model: "C50",
+          price: "4200",
+          condition: "8 成新",
+          flawDescription: "来源来路不明，需要买家自行判断",
+          supportsOfflineInspection: false,
+          recommendedHubIds: []
+        },
+        prohibitedRules
+      )
+    ).toEqual(["需人工复核来源，将进入人工审核"]);
   });
 });

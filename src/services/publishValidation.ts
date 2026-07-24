@@ -1,3 +1,5 @@
+import { findProhibitedMatches, type ProhibitedRule } from "./prohibitedRules";
+
 export interface PublishDraft {
   title: string;
   brand: string;
@@ -9,7 +11,7 @@ export interface PublishDraft {
   recommendedHubIds: string[];
 }
 
-export function validatePublishDraft(draft: PublishDraft): string[] {
+export function validatePublishDraft(draft: PublishDraft, prohibitedRules: ProhibitedRule[] = []): string[] {
   const errors: string[] = [];
 
   if (draft.title.trim().length === 0) {
@@ -41,5 +43,18 @@ export function validatePublishDraft(draft: PublishDraft): string[] {
     errors.push("支持线下验货时至少选择一个推荐据点");
   }
 
+  const blockedMatches = findProhibitedMatches(draft, prohibitedRules).filter((match) => match.severity === "block");
+  for (const match of blockedMatches) {
+    if (!errors.includes(match.explanation)) {
+      errors.push(match.explanation);
+    }
+  }
+
   return errors;
+}
+
+export function getPublishReviewWarnings(draft: PublishDraft, prohibitedRules: ProhibitedRule[] = []): string[] {
+  return findProhibitedMatches(draft, prohibitedRules)
+    .filter((match) => match.severity === "review")
+    .map((match) => `${match.explanation}，将进入人工审核`);
 }

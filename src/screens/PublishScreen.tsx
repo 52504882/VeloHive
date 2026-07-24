@@ -5,7 +5,8 @@ import { hubs } from "../data/seed";
 import type { LocalImageAsset, UploadedListingImage } from "../services/imageAssets";
 import { removeUploadedListingImages, uploadListingImages, validateListingImages } from "../services/imageAssets";
 import { ListingSubmissionError, submitListingForReview } from "../services/listingRepository";
-import { validatePublishDraft } from "../services/publishValidation";
+import { defaultProhibitedRules } from "../services/prohibitedRules";
+import { getPublishReviewWarnings, validatePublishDraft } from "../services/publishValidation";
 import { Chip, PrimaryButton, Section } from "../ui/components";
 import { colors, spacing } from "../ui/theme";
 
@@ -60,7 +61,11 @@ export function PublishScreen({ authConfigured = false, userId = null }: Publish
     [brand, condition, flawDescription, model, price, recommendedHubIds, supportsInspection, title]
   );
 
-  const errors = [...validatePublishDraft(draft), ...validateListingImages(images.map((image) => image.uri))];
+  const errors = [
+    ...validatePublishDraft(draft, defaultProhibitedRules),
+    ...validateListingImages(images.map((image) => image.uri))
+  ];
+  const warnings = getPublishReviewWarnings(draft, defaultProhibitedRules);
 
   useEffect(() => {
     if (errors.length > 0 && previewVisible) {
@@ -246,6 +251,11 @@ export function PublishScreen({ authConfigured = false, userId = null }: Publish
             {error}
           </Text>
         ))}
+        {warnings.map((warning) => (
+          <Text key={warning} style={styles.warning}>
+            {warning}
+          </Text>
+        ))}
         {previewBlocked ? <Text style={styles.error}>请先修正发布检查中的问题</Text> : null}
         <PrimaryButton label="预览发布" onPress={handlePreview} />
         <View style={styles.submitButton}>
@@ -324,6 +334,10 @@ const styles = StyleSheet.create({
   },
   error: {
     color: colors.coral,
+    marginBottom: spacing.sm
+  },
+  warning: {
+    color: colors.honey,
     marginBottom: spacing.sm
   },
   success: {

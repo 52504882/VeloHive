@@ -94,4 +94,24 @@ describe("App", () => {
     fireEvent.press(screen.getByText("我的"));
     expect(screen.getByText("阿泽")).toBeTruthy();
   });
+
+  it("shows prohibited rule feedback on the Publish tab", async () => {
+    renderEnteredApp();
+
+    fireEvent.press(screen.getByText("发布"));
+    fireEvent.changeText(screen.getByLabelText("标题"), "假货车架");
+    expect(screen.getByText("禁止发布假货或仿品")).toBeTruthy();
+    fireEvent.press(screen.getByText("提交审核"));
+    expect(screen.queryByText("已提交审核")).toBeNull();
+    expect(screen.getByText("请先修正发布检查中的问题")).toBeTruthy();
+
+    fireEvent.changeText(screen.getByLabelText("标题"), "碳纤维轮组");
+    fireEvent.changeText(screen.getByLabelText("瑕疵说明"), "来源来路不明，需要买家自行判断");
+    expect(screen.getByText("需人工复核来源，将进入人工审核")).toBeTruthy();
+
+    fireEvent.press(screen.getByText("预览发布"));
+    expect(screen.getByText("发布预览")).toBeTruthy();
+    fireEvent.press(screen.getByText("提交审核"));
+    expect(await screen.findByText("已提交审核")).toBeTruthy();
+  });
 });
