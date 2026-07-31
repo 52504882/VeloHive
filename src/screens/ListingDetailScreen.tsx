@@ -1,4 +1,7 @@
-import { Image, StyleSheet, Text } from "react-native";
+import { useState } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { currentUserId } from "../data/seed";
+import { ReportScreen } from "./ReportScreen";
 import {
   findHubById,
   findListingById,
@@ -6,15 +9,27 @@ import {
   getListingVerification,
   getTrustLabel
 } from "../services/catalog";
+import { blockUser } from "../services/blocks";
 import { PrimaryButton, Section } from "../ui/components";
 import { colors, spacing } from "../ui/theme";
 
 interface ListingDetailScreenProps {
+  authConfigured?: boolean;
   listingId: string;
   onBack: () => void;
+  userId?: string | null;
 }
 
-export function ListingDetailScreen({ listingId, onBack }: ListingDetailScreenProps) {
+export function ListingDetailScreen({
+  authConfigured = false,
+  listingId,
+  onBack,
+  userId = null
+}: ListingDetailScreenProps) {
+  const [reportVisible, setReportVisible] = useState(false);
+  const [actionMessage, setActionMessage] = useState("");
+  const isDemoMode = !authConfigured || !userId || userId === "demo-user";
+  const actorId = isDemoMode ? currentUserId : userId ?? currentUserId;
   const listing = findListingById(listingId);
 
   if (!listing) {
@@ -35,10 +50,36 @@ export function ListingDetailScreen({ listingId, onBack }: ListingDetailScreenPr
   const recommendedHubNames = listing.recommendedHubIds
     .map((hubId) => findHubById(hubId)?.name)
     .filter((hubName): hubName is string => Boolean(hubName));
+  const handleBlockSeller = async () => {
+    if (!seller) {
+      setActionMessage("未找到卖家，暂时无法拉黑");
+      return;
+    }
+
+    try {
+      await blockUser({
+        blockerId: actorId,
+        blockedId: seller.id,
+        persist: !isDemoMode
+      });
+      setActionMessage("已拉黑卖家");
+    } catch (error) {
+      setActionMessage(error instanceof Error ? error.message : "拉黑失败，请稍后重试");
+    }
+  };
 
   return (
     <>
       <PrimaryButton label="返回" onPress={onBack} />
+      {reportVisible ? (
+        <ReportScreen
+          reporterId={actorId}
+          targetType="listing"
+          targetId={listing.id}
+          targetLabel={listing.title}
+          persist={!isDemoMode}
+        />
+      ) : null}
       <Section>
         <Text style={styles.screenTitle}>商品详情</Text>
         <Image resizeMode="cover" source={{ uri: listing.imageUrls[0] }} style={styles.image} />
@@ -49,6 +90,17 @@ export function ListingDetailScreen({ listingId, onBack }: ListingDetailScreenPr
         </Text>
         <Text style={styles.meta}>规格：{listing.specs.join(" · ")}</Text>
         <Text style={styles.meta}>卖家：{seller?.nickname ?? "未知卖家"}</Text>
+        <View style={styles.actionStack}>
+          <PrimaryButton
+            label={reportVisible ? "收起举报" : "举报商品"}
+            onPress={() => {
+              setReportVisible((visible) => !visible);
+              setActionMessage("");
+            }}
+          />
+          <PrimaryButton label="拉黑卖家" onPress={handleBlockSeller} />
+        </View>
+        {actionMessage ? <Text style={actionMessage.startsWith("已") ? styles.success : styles.error}>{actionMessage}</Text> : null}
       </Section>
       <Section>
         <Text style={styles.label}>商品说明</Text>
@@ -117,5 +169,17 @@ const styles = StyleSheet.create({
     color: colors.muted,
     fontSize: 13,
     lineHeight: 20
+  },
+  actionStack: {
+    gap: spacing.sm,
+    marginTop: spacing.md
+  },
+  error: {
+    color: colors.coral,
+    marginTop: spacing.sm
+  },
+  success: {
+    color: colors.forest,
+    marginTop: spacing.sm
   }
 });

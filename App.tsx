@@ -166,7 +166,14 @@ function renderScreen(
   userId: string | null = null
 ) {
   if (detailRoute.type === "listing") {
-    return <ListingDetailScreen listingId={detailRoute.listingId} onBack={onBack} />;
+    return (
+      <ListingDetailScreen
+        authConfigured={authConfigured}
+        listingId={detailRoute.listingId}
+        onBack={onBack}
+        userId={userId}
+      />
+    );
   }
   if (detailRoute.type === "hub") {
     return <HubDetailScreen hubId={detailRoute.hubId} onBack={onBack} />;
@@ -185,7 +192,7 @@ function renderScreen(
     return <PublishScreen authConfigured={authConfigured} userId={userId} />;
   }
   if (mainTab === "messages") {
-    return <MessagesScreen />;
+    return <MessagesScreen authConfigured={authConfigured} userId={userId} />;
   }
   if (mainTab === "profile") {
     return <ProfileScreen />;

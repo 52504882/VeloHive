@@ -698,7 +698,7 @@ git commit -m "feat: add prohibited item review rules"
 - Test: `__tests__/reporting.test.ts`
 - Test: `__tests__/blocks.test.ts`
 
-- [ ] **Step 1: Write failing reporting tests**
+- [x] **Step 1: Write failing reporting tests**
 
 Create `__tests__/reporting.test.ts`:
 
@@ -720,7 +720,7 @@ describe("reporting", () => {
 });
 ```
 
-- [ ] **Step 2: Write failing block tests**
+- [x] **Step 2: Write failing block tests**
 
 Create `__tests__/blocks.test.ts`:
 
@@ -739,7 +739,7 @@ describe("user blocks", () => {
 });
 ```
 
-- [ ] **Step 3: Run failing tests**
+- [x] **Step 3: Run failing tests**
 
 Run:
 
@@ -749,7 +749,7 @@ npm test -- __tests__/reporting.test.ts __tests__/blocks.test.ts --runInBand
 
 Expected: FAIL because the services do not exist.
 
-- [ ] **Step 4: Implement services**
+- [x] **Step 4: Implement services**
 
 Create `src/services/reporting.ts`:
 
@@ -783,11 +783,11 @@ export function canStartConversation(buyerId: string, sellerId: string, blocks: 
 }
 ```
 
-- [ ] **Step 5: Add mobile reporting and blocking UI**
+- [x] **Step 5: Add mobile reporting and blocking UI**
 
 Create `src/screens/ReportScreen.tsx` for selecting a reason and entering details. Add `举报商品` and `拉黑卖家` actions to `ListingDetailScreen.tsx`. Add `拉黑用户` to `MessagesScreen.tsx`. Successful report creates a `reports` row with `status='open'`; successful block creates a `user_blocks` row.
 
-- [ ] **Step 6: Verify**
+- [x] **Step 6: Verify**
 
 Run:
 
@@ -798,7 +798,7 @@ npm run typecheck
 
 Expected: all tests pass and TypeScript exits with code 0.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/services src/screens __tests__

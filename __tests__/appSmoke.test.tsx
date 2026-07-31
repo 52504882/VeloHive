@@ -55,6 +55,21 @@ describe("App", () => {
     expect(screen.getByText("右侧手变有轻微擦痕，已拍照标注。")).toBeTruthy();
   });
 
+  it("reports a listing and blocks the seller from listing detail", async () => {
+    renderEnteredApp();
+
+    fireEvent.press(screen.getByLabelText("查看商品 Specialized Tarmac SL7 整车 52 码"));
+    fireEvent.press(screen.getByText("举报商品"));
+    fireEvent.press(screen.getByText("疑似假货"));
+    fireEvent.changeText(screen.getByLabelText("举报补充说明"), "价格和来源描述异常");
+    fireEvent.press(screen.getByText("提交举报"));
+
+    expect(await screen.findByText("举报已提交，平台会尽快处理。")).toBeTruthy();
+
+    fireEvent.press(screen.getByText("拉黑卖家"));
+    expect(await screen.findByText("已拉黑卖家")).toBeTruthy();
+  });
+
   it("switches from Gear to Hubs", () => {
     renderEnteredApp();
 
@@ -93,6 +108,15 @@ describe("App", () => {
 
     fireEvent.press(screen.getByText("我的"));
     expect(screen.getByText("阿泽")).toBeTruthy();
+  });
+
+  it("blocks a user from the Messages tab", async () => {
+    renderEnteredApp();
+
+    fireEvent.press(screen.getByText("消息"));
+    fireEvent.press(screen.getByText("拉黑用户"));
+
+    expect(await screen.findByText("已拉黑用户")).toBeTruthy();
   });
 
   it("shows prohibited rule feedback on the Publish tab", async () => {
