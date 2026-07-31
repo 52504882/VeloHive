@@ -17,9 +17,16 @@ npm install
 npm start
 npm test
 npm run typecheck
+npm run admin:dev
+npm run admin:test
+npm run admin:build
 ```
 
 ## 文档
 
 - [产品设计文档](docs/superpowers/specs/2026-07-23-road-bike-marketplace-design.md)
 - [移动端 MVP 实施计划](docs/superpowers/plans/2026-07-23-velohive-mobile-mvp.md)
+- [隐私政策草案](docs/legal/privacy-policy.zh-CN.md)
+- [用户协议草案](docs/legal/terms-of-service.zh-CN.md)
+- [禁售品规则](docs/legal/prohibited-items.zh-CN.md)
+- [应用商店检查清单](docs/release/app-store-checklist.md)

@@ -4,16 +4,20 @@
     "slug": "velohive",
     "version": "0.1.0",
     "orientation": "portrait",
+    "scheme": "velohive",
     "userInterfaceStyle": "light",
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "bundleIdentifier": "com.velohive.app",
       "supportsTablet": true,
       "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "用于选择商品照片并提交审核。"
+        "NSCameraUsageDescription": "用于拍摄商品、据点和聊天图片。",
+        "NSPhotoLibraryUsageDescription": "用于选择商品、据点和聊天图片。"
       }
     },
     "android": {
-      "permissions": ["READ_MEDIA_IMAGES"],
+      "package": "com.velohive.app",
+      "permissions": ["CAMERA", "READ_MEDIA_IMAGES"],
       "adaptiveIcon": {
         "backgroundColor": "#F7C948"
       }

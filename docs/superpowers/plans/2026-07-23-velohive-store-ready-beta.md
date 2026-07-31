@@ -1078,23 +1078,23 @@ git commit -m "feat: add admin moderation console"
 - Modify: `app.json`
 - Modify: `README.md`
 
-- [ ] **Step 1: Draft privacy policy**
+- [x] **Step 1: Draft privacy policy**
 
 Create `docs/legal/privacy-policy.zh-CN.md` with sections: information collected, account and phone number use, listing images, chat content, reports and moderation records, location and hub data, third-party services, retention, deletion request, contact method, and effective date.
 
-- [ ] **Step 2: Draft user agreement**
+- [x] **Step 2: Draft user agreement**
 
 Create `docs/legal/terms-of-service.zh-CN.md` with sections: user eligibility, marketplace information matching, no platform escrow in beta, offline inspection risk, seller truthfulness obligations, buyer due diligence, prohibited content, reports, account limits, liability boundaries, and contact method.
 
-- [ ] **Step 3: Draft prohibited item rules**
+- [x] **Step 3: Draft prohibited item rules**
 
 Create `docs/legal/prohibited-items.zh-CN.md` with explicit prohibited categories: stolen goods, counterfeit goods, unclear-source frames/components, recalled unsafe equipment, fake receipts, manipulated serial/frame numbers, illegal goods, harassment content, off-platform scam instructions, and non-cycling spam.
 
-- [ ] **Step 4: Add release checklist**
+- [x] **Step 4: Add release checklist**
 
 Create `docs/release/app-store-checklist.md` covering Apple Developer account, App Store Connect app record, privacy nutrition labels, TestFlight build, review test account, Google Play developer account, closed testing, data safety form, support URL, privacy URL, screenshots, icon, package identifiers, and China mainland APP备案 review.
 
-- [ ] **Step 5: Update app metadata**
+- [x] **Step 5: Update app metadata**
 
 Modify `app.json`:
 
@@ -1118,7 +1118,7 @@ Modify `app.json`:
 }
 ```
 
-- [ ] **Step 6: Verify**
+- [x] **Step 6: Verify**
 
 Run:
 
@@ -1129,7 +1129,7 @@ npm run typecheck
 
 Expected: Expo config prints `com.velohive.app` for iOS and Android; TypeScript exits with code 0.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add app.json README.md docs/legal docs/release
