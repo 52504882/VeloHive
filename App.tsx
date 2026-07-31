@@ -3,6 +3,8 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { hasPublicEnv } from "./src/config/env";
+import { currentUserId } from "./src/data/seed";
+import { ConversationScreen } from "./src/screens/ConversationScreen";
 import { AuthScreen } from "./src/screens/AuthScreen";
 import { HubDetailScreen } from "./src/screens/HubDetailScreen";
 import { HomeScreen } from "./src/screens/HomeScreen";
@@ -13,6 +15,7 @@ import { ProfileScreen } from "./src/screens/ProfileScreen";
 import { PublishScreen } from "./src/screens/PublishScreen";
 import { getCurrentSession } from "./src/services/auth";
 import { resolveAppGateState } from "./src/services/appGate";
+import type { ConversationRecord, MessageRecord } from "./src/services/messageRepository";
 import { acceptCurrentProfilePolicies, fetchCurrentProfile, type AuthProfile } from "./src/services/profile";
 import { Chip, Section } from "./src/ui/components";
 import { colors, spacing } from "./src/ui/theme";
@@ -22,7 +25,8 @@ type HomeTab = "gear" | "hubs";
 type DetailRoute =
   | { type: "main" }
   | { type: "listing"; listingId: string }
-  | { type: "hub"; hubId: string };
+  | { type: "hub"; hubId: string }
+  | { type: "conversation"; conversation: ConversationRecord; initialMessages?: MessageRecord[]; title: string };
 
 const mainTabs: Array<{ id: MainTab; label: string }> = [
   { id: "home", label: "首页" },
@@ -171,12 +175,28 @@ function renderScreen(
         authConfigured={authConfigured}
         listingId={detailRoute.listingId}
         onBack={onBack}
+        onOpenConversation={(conversation, initialMessages, title) =>
+          setDetailRoute({ type: "conversation", conversation, initialMessages, title })
+        }
         userId={userId}
       />
     );
   }
   if (detailRoute.type === "hub") {
     return <HubDetailScreen hubId={detailRoute.hubId} onBack={onBack} />;
+  }
+  if (detailRoute.type === "conversation") {
+    const isDemoMode = !authConfigured || !userId || userId === "demo-user";
+    return (
+      <ConversationScreen
+        conversation={detailRoute.conversation}
+        currentUserId={isDemoMode ? currentUserId : userId ?? currentUserId}
+        initialMessages={detailRoute.initialMessages}
+        onBack={onBack}
+        persist={!isDemoMode}
+        title={detailRoute.title}
+      />
+    );
   }
   if (mainTab === "home") {
     return (
@@ -192,7 +212,15 @@ function renderScreen(
     return <PublishScreen authConfigured={authConfigured} userId={userId} />;
   }
   if (mainTab === "messages") {
-    return <MessagesScreen authConfigured={authConfigured} userId={userId} />;
+    return (
+      <MessagesScreen
+        authConfigured={authConfigured}
+        onOpenConversation={(conversation, initialMessages, title) =>
+          setDetailRoute({ type: "conversation", conversation, initialMessages, title })
+        }
+        userId={userId}
+      />
+    );
   }
   if (mainTab === "profile") {
     return <ProfileScreen />;

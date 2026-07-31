@@ -10,6 +10,7 @@ import {
   getTrustLabel
 } from "../services/catalog";
 import { blockUser } from "../services/blocks";
+import { startConversation, type ConversationRecord, type MessageRecord } from "../services/messageRepository";
 import { PrimaryButton, Section } from "../ui/components";
 import { colors, spacing } from "../ui/theme";
 
@@ -17,6 +18,7 @@ interface ListingDetailScreenProps {
   authConfigured?: boolean;
   listingId: string;
   onBack: () => void;
+  onOpenConversation?: (conversation: ConversationRecord, initialMessages: MessageRecord[], title: string) => void;
   userId?: string | null;
 }
 
@@ -24,6 +26,7 @@ export function ListingDetailScreen({
   authConfigured = false,
   listingId,
   onBack,
+  onOpenConversation,
   userId = null
 }: ListingDetailScreenProps) {
   const [reportVisible, setReportVisible] = useState(false);
@@ -67,6 +70,24 @@ export function ListingDetailScreen({
       setActionMessage(error instanceof Error ? error.message : "拉黑失败，请稍后重试");
     }
   };
+  const handleStartConversation = async () => {
+    if (!seller) {
+      setActionMessage("未找到卖家，暂时无法私聊");
+      return;
+    }
+
+    try {
+      const conversation = await startConversation({
+        buyerId: actorId,
+        listingId: listing.id,
+        sellerId: seller.id,
+        persist: !isDemoMode
+      });
+      onOpenConversation?.(conversation, [], listing.title);
+    } catch (error) {
+      setActionMessage(error instanceof Error ? error.message : "私聊创建失败，请稍后重试");
+    }
+  };
 
   return (
     <>
@@ -98,6 +119,7 @@ export function ListingDetailScreen({
               setActionMessage("");
             }}
           />
+          <PrimaryButton label="私聊卖家" onPress={handleStartConversation} />
           <PrimaryButton label="拉黑卖家" onPress={handleBlockSeller} />
         </View>
         {actionMessage ? <Text style={actionMessage.startsWith("已") ? styles.success : styles.error}>{actionMessage}</Text> : null}

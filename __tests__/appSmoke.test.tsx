@@ -70,6 +70,19 @@ describe("App", () => {
     expect(await screen.findByText("已拉黑卖家")).toBeTruthy();
   });
 
+  it("starts a private conversation from listing detail and sends a message", async () => {
+    renderEnteredApp();
+
+    fireEvent.press(screen.getByLabelText("查看商品 Specialized Tarmac SL7 整车 52 码"));
+    fireEvent.press(screen.getByText("私聊卖家"));
+
+    expect(await screen.findByText("私聊")).toBeTruthy();
+    fireEvent.changeText(screen.getByLabelText("输入消息"), "周末可以看车吗？");
+    fireEvent.press(screen.getByText("发送"));
+
+    expect(await screen.findByText("周末可以看车吗？")).toBeTruthy();
+  });
+
   it("switches from Gear to Hubs", () => {
     renderEnteredApp();
 
@@ -117,6 +130,16 @@ describe("App", () => {
     fireEvent.press(screen.getByText("拉黑用户"));
 
     expect(await screen.findByText("已拉黑用户")).toBeTruthy();
+  });
+
+  it("opens an existing private conversation from the Messages tab", () => {
+    renderEnteredApp();
+
+    fireEvent.press(screen.getByText("消息"));
+    fireEvent.press(screen.getByText("打开会话"));
+
+    expect(screen.getByText("私聊")).toBeTruthy();
+    expect(screen.getByText("周六下午青浦湖畔咖啡看车可以。")).toBeTruthy();
   });
 
   it("shows prohibited rule feedback on the Publish tab", async () => {

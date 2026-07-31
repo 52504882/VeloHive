@@ -816,7 +816,7 @@ git commit -m "feat: add reporting and blocking flows"
 - Modify: `src/screens/ListingDetailScreen.tsx`
 - Test: `__tests__/messages.test.ts`
 
-- [ ] **Step 1: Write failing message ordering test**
+- [x] **Step 1: Write failing message ordering test**
 
 Create `__tests__/messages.test.ts`:
 
@@ -835,7 +835,7 @@ describe("messages", () => {
 });
 ```
 
-- [ ] **Step 2: Run the failing test**
+- [x] **Step 2: Run the failing test**
 
 Run:
 
@@ -845,7 +845,7 @@ npm test -- __tests__/messages.test.ts --runInBand
 
 Expected: FAIL because `src/services/messageRepository.ts` does not exist.
 
-- [ ] **Step 3: Implement message repository**
+- [x] **Step 3: Implement message repository**
 
 Create `src/services/messageRepository.ts` with:
 
@@ -862,11 +862,11 @@ export function sortMessagesAscending<T extends MessageLike>(messages: T[]): T[]
 
 Then add Supabase functions `startConversation`, `fetchConversations`, `fetchMessages`, `sendTextMessage`, and `subscribeToConversationMessages`.
 
-- [ ] **Step 4: Add conversation screen**
+- [x] **Step 4: Add conversation screen**
 
 Create `src/screens/ConversationScreen.tsx` with message list, text input, send button, loading state, empty state, and realtime subscription cleanup. Connect `ListingDetailScreen.tsx` `私聊卖家` to create/open a conversation. Update `MessagesScreen.tsx` to open existing conversations.
 
-- [ ] **Step 5: Verify**
+- [x] **Step 5: Verify**
 
 Run:
 
@@ -877,7 +877,7 @@ npm run typecheck
 
 Expected: all tests pass and TypeScript exits with code 0.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/services/messageRepository.ts src/screens __tests__/messages.test.ts

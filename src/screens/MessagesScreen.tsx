@@ -4,6 +4,7 @@ import { conversations, currentUserId } from "../data/seed";
 import type { ConversationMeetupStatus } from "../domain/types";
 import { blockUser } from "../services/blocks";
 import { findListingById, findUserById } from "../services/catalog";
+import type { ConversationRecord, MessageRecord } from "../services/messageRepository";
 import { PrimaryButton, Section } from "../ui/components";
 import { colors, spacing } from "../ui/theme";
 
@@ -16,10 +17,11 @@ const meetupStatusLabels: Record<ConversationMeetupStatus, string> = {
 
 interface MessagesScreenProps {
   authConfigured?: boolean;
+  onOpenConversation?: (conversation: ConversationRecord, initialMessages: MessageRecord[], title: string) => void;
   userId?: string | null;
 }
 
-export function MessagesScreen({ authConfigured = false, userId = null }: MessagesScreenProps) {
+export function MessagesScreen({ authConfigured = false, onOpenConversation, userId = null }: MessagesScreenProps) {
   const [message, setMessage] = useState("");
   const isDemoMode = !authConfigured || !userId || userId === "demo-user";
   const actorId = isDemoMode ? currentUserId : userId ?? currentUserId;
@@ -45,6 +47,28 @@ export function MessagesScreen({ authConfigured = false, userId = null }: Messag
         const listing = findListingById(conversation.listingId);
         const otherUserId = conversation.buyerId === actorId ? conversation.sellerId : conversation.buyerId;
         const otherUser = findUserById(otherUserId);
+        const conversationRecord: ConversationRecord = {
+          id: conversation.id,
+          buyerId: conversation.buyerId,
+          createdAt: conversation.lastMessageAt,
+          lastMessageAt: conversation.lastMessageAt,
+          listingId: conversation.listingId,
+          meetupStatus: conversation.meetupStatus,
+          sellerId: conversation.sellerId
+        };
+        const initialMessages: MessageRecord[] = conversation.lastMessagePreview
+          ? [
+              {
+                id: `${conversation.id}-preview`,
+                body: conversation.lastMessagePreview,
+                conversationId: conversation.id,
+                createdAt: conversation.lastMessageAt,
+                imageUrl: null,
+                kind: "text",
+                senderId: otherUserId
+              }
+            ]
+          : [];
 
         return (
           <Section key={conversation.id}>
@@ -52,6 +76,10 @@ export function MessagesScreen({ authConfigured = false, userId = null }: Messag
             <Text style={styles.preview}>{conversation.lastMessagePreview}</Text>
             <Text style={styles.meta}>对方：{otherUser?.nickname ?? "未知用户"}</Text>
             <Text style={styles.meta}>状态：{meetupStatusLabels[conversation.meetupStatus]}</Text>
+            <PrimaryButton
+              label="打开会话"
+              onPress={() => onOpenConversation?.(conversationRecord, initialMessages, listing?.title ?? "私聊")}
+            />
             <PrimaryButton label="拉黑用户" onPress={() => handleBlockUser(otherUserId)} />
           </Section>
         );
