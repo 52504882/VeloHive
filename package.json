@@ -7,6 +7,9 @@
     "start": "expo start",
     "ios": "expo start --ios",
     "android": "expo start --android",
+    "admin:build": "npm --prefix apps/admin run build",
+    "admin:dev": "npm --prefix apps/admin run dev",
+    "admin:test": "npm --prefix apps/admin run test",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
     "test": "jest"

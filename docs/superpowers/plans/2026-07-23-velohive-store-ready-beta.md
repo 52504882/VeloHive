@@ -984,7 +984,7 @@ git commit -m "feat: add hub onboarding"
 - Modify: `package.json`
 - Test: `apps/admin/src/services/adminRepository.test.ts`
 
-- [ ] **Step 1: Scaffold admin app**
+- [x] **Step 1: Scaffold admin app**
 
 Run:
 
@@ -994,7 +994,7 @@ npm create vite@latest apps/admin -- --template react-ts
 
 Expected: Vite creates a React TypeScript app under `apps/admin`.
 
-- [ ] **Step 2: Add root scripts**
+- [x] **Step 2: Add root scripts**
 
 Modify root `package.json` scripts:
 
@@ -1006,7 +1006,7 @@ Modify root `package.json` scripts:
 }
 ```
 
-- [ ] **Step 3: Write failing admin repository test**
+- [x] **Step 3: Write failing admin repository test**
 
 Create `apps/admin/src/services/adminRepository.test.ts`:
 
@@ -1024,7 +1024,7 @@ describe("admin repository helpers", () => {
 });
 ```
 
-- [ ] **Step 4: Run failing admin test**
+- [x] **Step 4: Run failing admin test**
 
 Run:
 
@@ -1034,7 +1034,7 @@ npm --prefix apps/admin run test -- adminRepository.test.ts
 
 Expected: FAIL because `adminRepository.ts` does not exist or test script is not configured.
 
-- [ ] **Step 5: Implement admin repository and screens**
+- [x] **Step 5: Implement admin repository and screens**
 
 Create `apps/admin/src/services/adminRepository.ts` with `nextReviewStatus`, `fetchPendingListings`, `approveListing`, `rejectListing`, `fetchOpenReports`, `resolveReport`, `fetchPendingHubs`, `approveHub`, `rejectHub`, `limitUser`, and `fetchAuditLogs`.
 
@@ -1046,7 +1046,7 @@ Implement screens:
 - `UsersAdmin.tsx`: user search, status badge, limit/restore controls.
 - `AuditLog.tsx`: chronological admin actions.
 
-- [ ] **Step 6: Verify**
+- [x] **Step 6: Verify**
 
 Run:
 
@@ -1059,7 +1059,7 @@ npm run typecheck
 
 Expected: all commands exit with code 0.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add package.json package-lock.json apps/admin
