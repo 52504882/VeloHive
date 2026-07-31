@@ -1145,7 +1145,7 @@ git commit -m "docs: add store readiness policies"
 - Modify: `README.md`
 - Test: no source test; verification is EAS config plus local checks.
 
-- [ ] **Step 1: Install and configure EAS**
+- [x] **Step 1: Install and configure EAS**
 
 Run:
 
@@ -1156,7 +1156,7 @@ npx eas build:configure
 
 Expected: `eas.json` exists.
 
-- [ ] **Step 2: Use beta build profiles**
+- [x] **Step 2: Use beta build profiles**
 
 Create or update `eas.json`:
 

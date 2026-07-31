@@ -20,6 +20,20 @@ npm run typecheck
 npm run admin:dev
 npm run admin:test
 npm run admin:build
+npx eas build:inspect --platform ios --profile preview
+npx eas build:inspect --platform android --profile preview
+```
+
+## Beta 构建
+
+`eas.json` 已提供 `development`、`preview` 和 `production` profiles。Apple/Google 凭证准备好后，可使用：
+
+```bash
+npx eas login
+npx eas build:inspect --platform ios --profile preview --stage archive --output /tmp/velohive-eas-ios --force
+npx eas build:inspect --platform android --profile preview --stage archive --output /tmp/velohive-eas-android --force
+npx eas build -p ios --profile preview
+npx eas build -p android --profile preview
 ```
 
 ## 文档
