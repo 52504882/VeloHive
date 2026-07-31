@@ -1,10 +1,14 @@
 import { StyleSheet, Text } from "react-native";
 import { currentUserId, users } from "../data/seed";
 import { getProfileStats } from "../services/catalog";
-import { Section } from "../ui/components";
+import { PrimaryButton, Section } from "../ui/components";
 import { colors, spacing } from "../ui/theme";
 
-export function ProfileScreen() {
+interface ProfileScreenProps {
+  onOpenHubApply?: () => void;
+}
+
+export function ProfileScreen({ onOpenHubApply }: ProfileScreenProps) {
   const user = users.find((item) => item.id === currentUserId);
   const stats = getProfileStats(currentUserId);
 
@@ -32,7 +36,7 @@ export function ProfileScreen() {
         <Text style={styles.item}>我的发布：{stats.activeListings}</Text>
         <Text style={styles.item}>我的收藏：{stats.favorites}</Text>
         <Text style={styles.item}>我的会话：{stats.conversations}</Text>
-        <Text style={styles.item}>据点入驻申请</Text>
+        <PrimaryButton label="据点入驻" onPress={() => onOpenHubApply?.()} />
         <Text style={styles.item}>举报和反馈</Text>
       </Section>
     </>

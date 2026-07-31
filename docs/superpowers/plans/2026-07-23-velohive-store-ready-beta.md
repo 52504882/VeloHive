@@ -895,7 +895,7 @@ git commit -m "feat: add private messaging"
 - Modify: `src/screens/HomeScreen.tsx`
 - Test: `__tests__/hubApplications.test.ts`
 
-- [ ] **Step 1: Write failing hub application validation tests**
+- [x] **Step 1: Write failing hub application validation tests**
 
 Create `__tests__/hubApplications.test.ts`:
 
@@ -929,7 +929,7 @@ describe("hub onboarding", () => {
 });
 ```
 
-- [ ] **Step 2: Run the failing test**
+- [x] **Step 2: Run the failing test**
 
 Run:
 
@@ -939,15 +939,15 @@ npm test -- __tests__/hubApplications.test.ts --runInBand
 
 Expected: FAIL because `src/services/hubApplications.ts` does not exist.
 
-- [ ] **Step 3: Implement validation and repository**
+- [x] **Step 3: Implement validation and repository**
 
 Create `src/services/hubApplications.ts` with validation plus `submitHubApplication`. New hubs must be inserted with `onboarding_status='pending'`. Approved hubs appear in the public hub list; pending and rejected hubs appear only to the owner and admins.
 
-- [ ] **Step 4: Add mobile application UI**
+- [x] **Step 4: Add mobile application UI**
 
 Create `src/screens/HubApplyScreen.tsx`. Add `据点入驻` entry in `ProfileScreen.tsx`. Add pending-status copy after submit: `已提交入驻申请，平台将在 3 个工作日内审核`.
 
-- [ ] **Step 5: Verify**
+- [x] **Step 5: Verify**
 
 Run:
 
@@ -958,7 +958,7 @@ npm run typecheck
 
 Expected: all tests pass and TypeScript exits with code 0.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/services/hubApplications.ts src/screens __tests__/hubApplications.test.ts

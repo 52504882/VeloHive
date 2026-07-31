@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
-import { hubs } from "../data/seed";
-import { getListingVerification, getTrustLabel, searchListings } from "../services/catalog";
+import { getListingVerification, getTrustLabel, publicHubs, searchListings } from "../services/catalog";
 import { Chip, PrimaryButton, Section } from "../ui/components";
 import { colors, spacing } from "../ui/theme";
 
@@ -86,7 +85,7 @@ function HubList({ onOpenHub }: { onOpenHub: (hubId: string) => void }) {
   return (
     <>
       <Text style={styles.screenTitle}>骑友友好据点</Text>
-      {hubs.map((hub) => (
+      {publicHubs().map((hub) => (
         <Section key={hub.id}>
           <Image resizeMode="cover" source={{ uri: hub.imageUrls[0] }} style={styles.image} />
           <Text style={styles.cardTitle}>{hub.name}</Text>

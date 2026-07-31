@@ -7,6 +7,7 @@ import {
   getListingVerification,
   getProfileStats,
   getTrustLabel,
+  publicHubs,
   searchListings,
   suitableInspectionHubs
 } from "../src/services/catalog";
@@ -125,6 +126,10 @@ describe("catalog services", () => {
 
   it("returns hubs that are suitable for inspection", () => {
     expect(suitableInspectionHubs().map((hub) => hub.id)).toEqual(["hub-001", "hub-002"]);
+  });
+
+  it("returns only approved public hubs", () => {
+    expect(publicHubs().every((hub) => hub.onboardingStatus === "approved")).toBe(true);
   });
 
   it("calculates profile stats", () => {

@@ -123,6 +123,22 @@ describe("App", () => {
     expect(screen.getByText("阿泽")).toBeTruthy();
   });
 
+  it("submits a hub onboarding application from Profile", async () => {
+    renderEnteredApp();
+
+    fireEvent.press(screen.getByText("我的"));
+    fireEvent.press(screen.getByText("据点入驻"));
+    fireEvent.changeText(screen.getByLabelText("据点名称"), "嘉定骑行咖啡");
+    fireEvent.changeText(screen.getByLabelText("据点地址"), "上海市嘉定区环城路 18 号");
+    fireEvent.changeText(screen.getByLabelText("营业时间"), "09:00-19:00");
+    fireEvent.changeText(screen.getByLabelText("联系方式"), "到店前电话确认");
+    fireEvent.press(screen.getByText("咖啡"));
+    fireEvent.press(screen.getByText("停车"));
+    fireEvent.press(screen.getByText("提交入驻申请"));
+
+    expect(await screen.findByText("已提交入驻申请，平台将在 3 个工作日内审核")).toBeTruthy();
+  });
+
   it("blocks a user from the Messages tab", async () => {
     renderEnteredApp();
 

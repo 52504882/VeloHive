@@ -51,6 +51,10 @@ export function suitableInspectionHubs(): Hub[] {
   return hubs.filter((hub) => hub.onboardingStatus === "approved" && hub.suitableForInspection);
 }
 
+export function publicHubs(): Hub[] {
+  return hubs.filter((hub) => hub.onboardingStatus === "approved");
+}
+
 export function getTrustLabel(score: number): "自证完整" | "自证较完整" | "基础自证" {
   if (score >= 85) {
     return "自证完整";

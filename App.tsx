@@ -7,6 +7,7 @@ import { currentUserId } from "./src/data/seed";
 import { ConversationScreen } from "./src/screens/ConversationScreen";
 import { AuthScreen } from "./src/screens/AuthScreen";
 import { HubDetailScreen } from "./src/screens/HubDetailScreen";
+import { HubApplyScreen } from "./src/screens/HubApplyScreen";
 import { HomeScreen } from "./src/screens/HomeScreen";
 import { LegalConsentScreen } from "./src/screens/LegalConsentScreen";
 import { ListingDetailScreen } from "./src/screens/ListingDetailScreen";
@@ -26,6 +27,7 @@ type DetailRoute =
   | { type: "main" }
   | { type: "listing"; listingId: string }
   | { type: "hub"; hubId: string }
+  | { type: "hubApply" }
   | { type: "conversation"; conversation: ConversationRecord; initialMessages?: MessageRecord[]; title: string };
 
 const mainTabs: Array<{ id: MainTab; label: string }> = [
@@ -185,6 +187,16 @@ function renderScreen(
   if (detailRoute.type === "hub") {
     return <HubDetailScreen hubId={detailRoute.hubId} onBack={onBack} />;
   }
+  if (detailRoute.type === "hubApply") {
+    const isDemoMode = !authConfigured || !userId || userId === "demo-user";
+    return (
+      <HubApplyScreen
+        ownerId={isDemoMode ? currentUserId : userId ?? currentUserId}
+        onBack={onBack}
+        persist={!isDemoMode}
+      />
+    );
+  }
   if (detailRoute.type === "conversation") {
     const isDemoMode = !authConfigured || !userId || userId === "demo-user";
     return (
@@ -223,7 +235,7 @@ function renderScreen(
     );
   }
   if (mainTab === "profile") {
-    return <ProfileScreen />;
+    return <ProfileScreen onOpenHubApply={() => setDetailRoute({ type: "hubApply" })} />;
   }
 
   return (
